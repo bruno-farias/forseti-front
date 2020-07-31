@@ -5,16 +5,20 @@ import { Button, Form, Grid, Header, Image, Message, Segment, Container } from '
 import { useAuth } from '../../hooks/auth';
 
 import logoImg from '../../assets/logo.png';
+import { useToast } from '../../hooks/toast';
 
 interface SignUpForData {
   name: string;
   email: string;
   password: string;
+  password_confirmation: string;
 }
 
 export const SignUp: React.FC = () => {
   const history = useHistory();
+  const { addToast } = useToast();
   const { signUp } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<SignUpForData>({} as SignUpForData);
 
   const handleChange = useCallback(
@@ -25,9 +29,27 @@ export const SignUp: React.FC = () => {
   );
 
   const handleSignUp = useCallback(async () => {
-    await signUp({ name: formData.name, email: formData.email, password: formData.password });
-    history.push('/signin');
-  }, [formData, history, signUp]);
+    setLoading(true);
+    try {
+      await signUp({ ...formData });
+
+      addToast({
+        type: 'success',
+        title: 'Cadastro realizado',
+        description: 'Você já pode fazer seu logon',
+      });
+
+      history.push('/signin');
+    } catch {
+      addToast({
+        type: 'error',
+        title: 'Erro no cadastro',
+        description: 'Ocorreu um erro no cadastro, tente novamente',
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [formData, history, addToast, signUp]);
 
   return (
     <Container>
@@ -35,7 +57,7 @@ export const SignUp: React.FC = () => {
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as="h2" color="teal" textAlign="left">
             <Image src={logoImg} />
-            Cria sua conta
+            Crie sua conta
           </Header>
           <Form size="large" onSubmit={handleSignUp}>
             <Segment stacked>
@@ -68,8 +90,18 @@ export const SignUp: React.FC = () => {
                 value={formData.password}
                 onChange={handleChange}
               />
+              <Form.Input
+                fluid
+                icon="lock"
+                iconPosition="left"
+                placeholder="Confirmação de senha"
+                name="password_confirmation"
+                type="password"
+                value={formData.password_confirmation}
+                onChange={handleChange}
+              />
 
-              <Button type="submit" color="teal" fluid size="large">
+              <Button loading={loading} disabled={loading} type="submit" color="teal" fluid size="large">
                 Criar Conta
               </Button>
             </Segment>

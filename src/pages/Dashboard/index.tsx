@@ -1,9 +1,16 @@
 import React from 'react';
+import { Container, Header, Button } from 'semantic-ui-react';
 
-// import { Container } from './styles';
+import { useAuth } from '../../hooks/auth';
 
 const Dashboard: React.FC = () => {
-  return <div>Dashboard</div>;
+  const { user, signOut } = useAuth();
+  return (
+    <Container>
+      <Header>Bem vindo {user.name}</Header>
+      <Button onClick={signOut}>Sair</Button>
+    </Container>
+  );
 };
 
 export default Dashboard;

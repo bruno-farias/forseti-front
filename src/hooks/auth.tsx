@@ -22,6 +22,7 @@ interface SignUpCredentials {
   name: string;
   email: string;
   password: string;
+  password_confirmation: string;
 }
 
 interface AuthContextData {
@@ -47,9 +48,9 @@ const AuthProvider: React.FC = ({ children }) => {
   });
 
   const signIn = useCallback(async ({ email, password }) => {
-    const response = await api.post('login', { email, password });
+    const response = await api.post('auth/login', { email, password });
 
-    const { token, user } = response.data;
+    const { access_token: token, user } = response.data;
     localStorage.setItem('@Forseti:token', token);
     localStorage.setItem('@Forseti:user', JSON.stringify(user));
 
@@ -58,8 +59,8 @@ const AuthProvider: React.FC = ({ children }) => {
     setData({ token, user });
   }, []);
 
-  const signUp = useCallback(async ({ name, email, password }) => {
-    await api.post('register', { name, email, password });
+  const signUp = useCallback(async ({ name, email, password, password_confirmation }) => {
+    await api.post('auth/register', { name, email, password, password_confirmation });
   }, []);
 
   const signOut = useCallback(() => {

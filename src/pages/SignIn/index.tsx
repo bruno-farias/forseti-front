@@ -5,6 +5,7 @@ import { Button, Form, Grid, Header, Image, Message, Segment, Container } from '
 import { useAuth } from '../../hooks/auth';
 
 import logoImg from '../../assets/logo.png';
+import { useToast } from '../../hooks/toast';
 
 interface SignInForData {
   email: string;
@@ -13,7 +14,9 @@ interface SignInForData {
 
 export const SignIn: React.FC = () => {
   const history = useHistory();
+  const { addToast } = useToast();
   const { signIn } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<SignInForData>({} as SignInForData);
 
   const handleChange = useCallback(
@@ -24,9 +27,21 @@ export const SignIn: React.FC = () => {
   );
 
   const handleSignIn = useCallback(async () => {
-    await signIn({ email: formData.email, password: formData.password });
-    history.push('/');
-  }, [formData, history, signIn]);
+    setLoading(true);
+    try {
+      await signIn({ email: formData.email, password: formData.password });
+
+      history.push('/');
+    } catch {
+      addToast({
+        type: 'error',
+        title: 'Erro na autenticação',
+        description: 'Ocorreu um erro ao fazer login, cheque as credenciais',
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [formData, history, addToast, signIn]);
 
   return (
     <Container>
@@ -58,7 +73,7 @@ export const SignIn: React.FC = () => {
                 onChange={handleChange}
               />
 
-              <Button type="submit" color="teal" fluid size="large">
+              <Button loading={loading} disabled={loading} type="submit" color="teal" fluid size="large">
                 Entrar
               </Button>
             </Segment>
