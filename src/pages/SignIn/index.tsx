@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button, Form, Grid, Header, Image, Message, Segment, Container } from 'semantic-ui-react';
+
+import { useAuth } from '../../hooks/auth';
 
 import logoImg from '../../assets/logo.png';
 
@@ -10,6 +12,8 @@ interface SignInForData {
 }
 
 export const SignIn: React.FC = () => {
+  const history = useHistory();
+  const { signIn } = useAuth();
   const [formData, setFormData] = useState<SignInForData>({} as SignInForData);
 
   const handleChange = useCallback(
@@ -19,9 +23,10 @@ export const SignIn: React.FC = () => {
     [formData],
   );
 
-  const handleSignIn = useCallback(() => {
-    console.log({ formData });
-  }, [formData]);
+  const handleSignIn = useCallback(async () => {
+    await signIn({ email: formData.email, password: formData.password });
+    history.push('/');
+  }, [formData, history, signIn]);
 
   return (
     <Container>

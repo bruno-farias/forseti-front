@@ -1,15 +1,20 @@
 import React, { useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button, Form, Grid, Header, Image, Message, Segment, Container } from 'semantic-ui-react';
+
+import { useAuth } from '../../hooks/auth';
 
 import logoImg from '../../assets/logo.png';
 
 interface SignUpForData {
+  name: string;
   email: string;
   password: string;
 }
 
 export const SignUp: React.FC = () => {
+  const history = useHistory();
+  const { signUp } = useAuth();
   const [formData, setFormData] = useState<SignUpForData>({} as SignUpForData);
 
   const handleChange = useCallback(
@@ -19,9 +24,10 @@ export const SignUp: React.FC = () => {
     [formData],
   );
 
-  const handleSignUp = useCallback(() => {
-    console.log({ formData });
-  }, [formData]);
+  const handleSignUp = useCallback(async () => {
+    await signUp({ name: formData.name, email: formData.email, password: formData.password });
+    history.push('/signin');
+  }, [formData, history, signUp]);
 
   return (
     <Container>
@@ -37,8 +43,18 @@ export const SignUp: React.FC = () => {
                 fluid
                 icon="user"
                 iconPosition="left"
-                name="email"
+                placeholder="Nome"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+              />
+              <Form.Input
+                fluid
+                icon="address book"
+                iconPosition="left"
                 placeholder="E-mail"
+                type="email"
+                name="email"
                 value={formData.email}
                 onChange={handleChange}
               />
@@ -46,8 +62,8 @@ export const SignUp: React.FC = () => {
                 fluid
                 icon="lock"
                 iconPosition="left"
-                name="password"
                 placeholder="Senha"
+                name="password"
                 type="password"
                 value={formData.password}
                 onChange={handleChange}
