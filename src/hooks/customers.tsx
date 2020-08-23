@@ -2,7 +2,7 @@ import React, { createContext, useCallback, useState, useContext } from 'react';
 
 import api from '../services/api';
 
-interface Customer {
+export interface Customer {
   id: string;
   name: string;
   email: string;
@@ -16,14 +16,11 @@ interface CustomersState {
   customers: Customer[];
 }
 
-interface CreateCustomerDTO {
-  email: string;
-  password: string;
-}
+type CreateCustomerDTO = Omit<Customer, 'id'>;
 
 interface CustomersContextData {
   customers: Customer[];
-  list(): Promise<void>;
+  getCustomers(): Promise<void>;
   create(customerData: CreateCustomerDTO): Promise<void>;
   updateCustomer(customer: Customer): Promise<void>;
   remove(id: string): void;
@@ -41,9 +38,9 @@ const CustomersProvider: React.FC = ({ children }) => {
     return {} as CustomersState;
   });
 
-  const list = useCallback(async () => {
+  const getCustomers = useCallback(async () => {
     const response = await api.get('customers');
-    const customers = response.data;
+    const customers = response.data.data;
     localStorage.setItem('@Forseti:customers', JSON.stringify(customers));
 
     setData({ customers });
@@ -99,7 +96,7 @@ const CustomersProvider: React.FC = ({ children }) => {
   );
 
   return (
-    <CustomersContext.Provider value={{ customers: data.customers, list, create, updateCustomer, remove }}>
+    <CustomersContext.Provider value={{ customers: data.customers, getCustomers, create, updateCustomer, remove }}>
       {children}
     </CustomersContext.Provider>
   );

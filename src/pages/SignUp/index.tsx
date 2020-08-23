@@ -60,7 +60,7 @@ export const SignUp: React.FC = () => {
             Crie sua conta
           </Header>
           <Form size="large" onSubmit={handleSignUp}>
-            <Segment stacked>
+            <Segment>
               <Form.Input
                 fluid
                 icon="user"

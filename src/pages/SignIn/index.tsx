@@ -52,7 +52,7 @@ export const SignIn: React.FC = () => {
             Entre com sua conta
           </Header>
           <Form size="large" onSubmit={handleSignIn}>
-            <Segment stacked>
+            <Segment>
               <Form.Input
                 fluid
                 icon="user"

@@ -1,53 +1,59 @@
-import React, { useCallback } from 'react';
-import { Container, Segment, Icon, Table, Header, Button } from 'semantic-ui-react';
+import React, { useState, useEffect } from 'react';
+import { Container, Dimmer, Loader, Segment, Icon, Table, Header, Button } from 'semantic-ui-react';
 
+import { useCustomers } from '../../hooks/customers';
+
+import FormModal from './components/FormModal';
 import ForsetiHeader from '../../components/Header';
 
 const Clients: React.FC = () => {
-  const handleAddUser = useCallback(() => {
-    console.log('add user');
-  }, []);
+  const { customers, getCustomers } = useCustomers();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    getCustomers();
+  }, [getCustomers]);
 
   return (
     <>
       <ForsetiHeader />
+      <FormModal open={open} closeModal={() => setOpen(false)} />
+      {!customers && (
+        <Dimmer active inverted>
+          <Loader size="mini">Carregando</Loader>
+        </Dimmer>
+      )}
       <Container>
         <Segment style={{ padding: '4em 0em' }} vertical>
           <Header as="h2" floated="left">
             Clientes
           </Header>
-          <Button floated="right" icon labelPosition="left" primary size="small" onClick={handleAddUser}>
-            <Icon name="user" /> Add User
+          <Button floated="right" icon labelPosition="left" primary size="small" onClick={() => setOpen(true)}>
+            <Icon name="user" /> Adicionar Cliente
           </Button>
           <Table celled compact definition>
             <Table.Header fullWidth>
               <Table.Row>
-                <Table.HeaderCell>Name</Table.HeaderCell>
-                <Table.HeaderCell>Registration Date</Table.HeaderCell>
+                <Table.HeaderCell>Nome</Table.HeaderCell>
+                <Table.HeaderCell>Nome Legal</Table.HeaderCell>
+                <Table.HeaderCell>Nome no documento</Table.HeaderCell>
                 <Table.HeaderCell>E-mail address</Table.HeaderCell>
-                <Table.HeaderCell>Premium Plan</Table.HeaderCell>
+                <Table.HeaderCell>Telefone</Table.HeaderCell>
+                <Table.HeaderCell>Celular</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 
             <Table.Body>
-              <Table.Row>
-                <Table.Cell>John Lilki</Table.Cell>
-                <Table.Cell>September 14, 2013</Table.Cell>
-                <Table.Cell>jhlilk22@yahoo.com</Table.Cell>
-                <Table.Cell>No</Table.Cell>
-              </Table.Row>
-              <Table.Row>
-                <Table.Cell>Jamie Harington</Table.Cell>
-                <Table.Cell>January 11, 2014</Table.Cell>
-                <Table.Cell>jamieharingonton@yahoo.com</Table.Cell>
-                <Table.Cell>Yes</Table.Cell>
-              </Table.Row>
-              <Table.Row>
-                <Table.Cell>Jill Lewis</Table.Cell>
-                <Table.Cell>May 11, 2014</Table.Cell>
-                <Table.Cell>jilsewris22@yahoo.com</Table.Cell>
-                <Table.Cell>Yes</Table.Cell>
-              </Table.Row>
+              {customers?.map(customer => (
+                <Table.Row>
+                  <Table.Cell>{customer.name}</Table.Cell>
+                  <Table.Cell>{customer.legal_name}</Table.Cell>
+                  <Table.Cell>{customer.document_name}</Table.Cell>
+                  <Table.Cell>{customer.email}</Table.Cell>
+                  <Table.Cell>{customer.phone}</Table.Cell>
+                  <Table.Cell>{customer.mobile}</Table.Cell>
+                </Table.Row>
+              ))}
             </Table.Body>
           </Table>
         </Segment>
