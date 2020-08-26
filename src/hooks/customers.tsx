@@ -8,7 +8,7 @@ export interface Customer {
   email: string;
   phone: string;
   legal_name: string;
-  document_name: string;
+  document_number: string;
   mobile: string;
 }
 
@@ -50,8 +50,12 @@ const CustomersProvider: React.FC = ({ children }) => {
     async (customerData: CreateCustomerDTO) => {
       const response = await api.post('customers', customerData);
 
-      const { customer } = response.data;
-      const customers = [...data.customers, customer];
+      const { id } = response.data;
+      const createdCustomer = {
+        id,
+        ...customerData,
+      };
+      const customers = [...data.customers, createdCustomer];
       localStorage.setItem('@Forseti:customers', JSON.stringify(customers));
 
       setData({ customers });

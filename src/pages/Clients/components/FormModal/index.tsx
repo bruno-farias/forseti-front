@@ -62,6 +62,15 @@ const FormModal: React.FC<Props> = ({ open, closeModal }) => {
             />
             <Form.Input
               fluid
+              icon="user"
+              iconPosition="left"
+              placeholder="Nome legal"
+              name="legal_name"
+              value={formData.legal_name}
+              onChange={handleChange}
+            />
+            <Form.Input
+              fluid
               icon="address book"
               iconPosition="left"
               placeholder="E-mail"
@@ -72,20 +81,11 @@ const FormModal: React.FC<Props> = ({ open, closeModal }) => {
             />
             <Form.Input
               fluid
-              icon="user"
+              icon="address card"
               iconPosition="left"
-              placeholder="Nome legal"
-              name="legal_name"
-              value={formData.legal_name}
-              onChange={handleChange}
-            />
-            <Form.Input
-              fluid
-              icon="user"
-              iconPosition="left"
-              placeholder="Nome no documento"
-              name="document_name"
-              value={formData.document_name}
+              placeholder="Documento"
+              name="document_number"
+              value={formData.document_number}
               onChange={handleChange}
             />
             <Form.Input
