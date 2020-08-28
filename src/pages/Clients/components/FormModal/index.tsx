@@ -34,7 +34,7 @@ const FormModal: React.FC<Props> = ({ customer, open, closeModal }) => {
     setLoading(true);
     try {
       await create(formData);
-      closeModal();
+      handleCloseModal();
     } catch {
       addToast({
         type: 'error',
@@ -44,7 +44,7 @@ const FormModal: React.FC<Props> = ({ customer, open, closeModal }) => {
     } finally {
       setLoading(false);
     }
-  }, [closeModal, create, addToast, setLoading, formData]);
+  }, [handleCloseModal, create, addToast, setLoading, formData]);
 
   const handleEditUser = useCallback(async () => {
     setLoading(true);
@@ -55,7 +55,7 @@ const FormModal: React.FC<Props> = ({ customer, open, closeModal }) => {
           ...formData,
         });
       }
-      closeModal();
+      handleCloseModal();
     } catch {
       addToast({
         type: 'error',
@@ -65,7 +65,7 @@ const FormModal: React.FC<Props> = ({ customer, open, closeModal }) => {
     } finally {
       setLoading(false);
     }
-  }, [closeModal, customer, updateCustomer, addToast, setLoading, formData]);
+  }, [handleCloseModal, customer, updateCustomer, addToast, setLoading, formData]);
 
   return (
     <Modal open={open} onClose={handleCloseModal}>
