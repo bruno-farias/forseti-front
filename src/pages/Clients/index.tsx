@@ -22,6 +22,12 @@ const Clients: React.FC = () => {
 
   const handleEditCustomer = useCallback((customer: Customer) => {
     setSelectedCustomer(customer);
+    setFormModalOpen(true);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setSelectedCustomer(undefined);
+    setFormModalOpen(false);
   }, []);
 
   const handleRemoveCustomer = useCallback(
@@ -52,7 +58,7 @@ const Clients: React.FC = () => {
   return (
     <>
       <ForsetiHeader />
-      <FormModal open={formModalOpen} closeModal={() => setFormModalOpen(false)} />
+      <FormModal customer={selectedCustomer} open={formModalOpen} closeModal={handleCloseModal} />
       {!customers && (
         <Dimmer active inverted>
           <Loader size="mini">Carregando</Loader>

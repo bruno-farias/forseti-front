@@ -89,7 +89,7 @@ const CustomersProvider: React.FC = ({ children }) => {
         return c;
       });
 
-      await api.put(`customers/${customer.id}`, { customer });
+      await api.put(`customers/${customer.id}`, customer);
       localStorage.setItem('@Forseti:customers', JSON.stringify(updatedCustomer));
 
       setData({
