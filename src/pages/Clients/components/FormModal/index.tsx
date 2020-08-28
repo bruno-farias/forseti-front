@@ -38,8 +38,8 @@ const FormModal: React.FC<Props> = ({ customer, open, closeModal }) => {
     } catch {
       addToast({
         type: 'error',
-        title: 'Erro atualizando cliente',
-        description: 'Ocorreu um erro ao atualizar o cliente, cheque os dados',
+        title: 'Erro cadastrando cliente',
+        description: 'Ocorreu um erro ao cadastrar o cliente, cheque os dados de cadastro',
       });
     } finally {
       setLoading(false);
@@ -59,8 +59,8 @@ const FormModal: React.FC<Props> = ({ customer, open, closeModal }) => {
     } catch {
       addToast({
         type: 'error',
-        title: 'Erro cadastrando cliente',
-        description: 'Ocorreu um erro ao cadastrar o cliente, cheque os dados de cadastro',
+        title: 'Erro atualizando cliente',
+        description: 'Ocorreu um erro ao atualizar o cliente, cheque os dados',
       });
     } finally {
       setLoading(false);
